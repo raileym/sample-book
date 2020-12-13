@@ -1,0 +1,168 @@
+# My File
+
+
+```{r, echo=FALSE}
+library(plotly)
+# volcano is a numeric matrix that ships with R
+fig <- plot_ly(z = ~volcano)
+fig <- fig %>% add_surface()
+
+fig
+```
+
+```{r, echo=FALSE}
+library(plotly)
+# volcano is a numeric matrix that ships with R
+fig <- plot_ly(z = ~volcano) %>% add_surface(
+  contours = list(
+    z = list(
+      show=TRUE,
+      usecolormap=TRUE,
+      highlightcolor="#ff0000",
+      project=list(z=TRUE)
+      )
+    )
+  )
+fig <- fig %>% layout(
+    scene = list(
+      camera=list(
+        eye = list(x=1.87, y=0.88, z=-0.64)
+        )
+      )
+  )
+
+fig
+```
+
+```{r, echo=FALSE}
+library(plotly)
+
+x <- seq(0,10, length.out = 1000)
+
+# create data
+aval <- list()
+for(step in 1:11){
+  aval[[step]] <-list(visible = FALSE,
+                      name = paste0('v = ', step),
+                      x=x,
+                      y=sin(step*x))
+}
+aval[3][[1]]$visible = TRUE
+
+# create steps and plot all traces
+steps <- list()
+fig <- plot_ly()
+for (i in 1:11) {
+ fig <- add_lines(fig,x=aval[i][[1]]$x,  y=aval[i][[1]]$y, visible = aval[i][[1]]$visible, 
+                 name = aval[i][[1]]$name, type = 'scatter', mode = 'lines', hoverinfo = 'name', 
+                 line=list(color='00CED1'), showlegend = FALSE)
+
+  step <- list(args = list('visible', rep(FALSE, length(aval))),
+               method = 'restyle')
+  step$args[[2]][i] = TRUE  
+  steps[[i]] = step 
+}  
+
+# add slider control to plot
+fig <- fig %>%
+  layout(sliders = list(list(active = 3,
+                             currentvalue = list(prefix = "Frequency: "),
+                             steps = steps)))
+
+fig
+```
+
+```{r, echo=FALSE}
+library(threejs)
+z <- seq(-10, 10, 0.1)
+x <- cos(z)
+y <- sin(z)
+scatterplot3js(x, y, z, color=rainbow(length(z)))
+```
+
+```{r}
+set.seed(324)
+data <- data.frame(
+  day = paste0("day", 1:10),
+  A   = runif(10, 0, 10),
+  B   = runif(10, 0, 10),
+  C   = runif(10, 0, 10)
+)
+
+# NSE version
+chartist::chartist(data, day)
+```
+
+The sum of a geometric series:
+
+$$
+g(r) = \sum^{\infty}_{k=0}ar^k = a + ar + ar^2 + ar^3 + \cdots = \frac{a}{1-r}.
+$$
+
+
+Taking the derivative of both sides of the equation yields the first derivative:
+
+$$
+g'(r) = \sum^{\infty}_{k=0}akr^{k-1} = a + 2ar + 3ar^2 + 4ar^3 + \cdots = \frac{a}{(1-r)^2}.
+$$
+
+The probability mass function
+
+$$f(x) = P(X=x) = (1-p)^{x-1} p $$
+
+for $0 < p < 1$, $x=1, 2, 3,...$ for a geometric random variable $X$ is a valid p.m.f. [1]
+
+The expected value of the geometric distribution is given by the expression
+
+\begin{align}
+\mathbb{E}[X] = & \ \sum^{\infty}_{x=0} x (1-p)^{x-1} p \\
+              = & \ \sum^{\infty}_{x=0} p x (1-p)^{x-1}. \\
+\end{align}
+
+Eqs. (1) and (3) are equivalent if we substitute $p$ for $a$, $x$ for $k$, and $(1-p)$ for $r.$ In so doing, Eq (3) reduces to the following expression
+
+\begin{align}
+\mathbb{E}[X] = & \ \frac{p}{(1-(1-p))^2} \\
+              = & \ \frac 1p
+\end{align}
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{python, echo=FALSE}
+import matplotlib.pyplot as plt
+
+# Pie chart, where the slices will be ordered and plotted counter-clockwise:
+labels = 'Individual', 'Corp', 'Payroll', 'GDP'
+sizes = [50, 6, 26, 16]
+explode = (0, 0.4, 0, 0)  # only "explode" the 2nd slice (i.e. 'Hogs')
+
+fig1, ax1 = plt.subplots()
+ax1.pie(sizes, explode=explode, labels=labels, autopct='%1.1f%%',
+        shadow=True, startangle=90)
+ax1.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
+
+plt.show()
+```
+
+```{r cars}
+summary(cars)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
